@@ -14,8 +14,7 @@ from utils.graph_utils import spatial_norm_tensor
 # from nns.post_processing_blocks import PostProcessingBlocV2
 
 # ── NEW: import the DAGMA projector ──
-from dagma import DAGMA
-
+import dagma as DAGMA
 
 class DagGenGRUg4s2v1(nn.Module):
     """
