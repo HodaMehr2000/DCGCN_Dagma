@@ -46,10 +46,11 @@ class DyGCN(nn.Module):
         T, B, N, _ = x.shape
         t = self.fc1(x)
         t2 = F.relu(self.gcn1(t.reshape(T*B, N, -1), adj.reshape(T*B, N, -1)), inplace=True).reshape(T, B, N, -1)
+        
         t3 = self.fc2(t2).permute(1, 2, 0, 3)  # (B, N, T, H)
         out = self.bn(t3).permute(2, 0, 1, 3)
         return out
-
+adj.reshape(T*B, N, N)
 
 class MultiHeadLinear(nn.Module):
     """
