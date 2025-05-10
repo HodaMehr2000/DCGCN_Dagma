@@ -138,7 +138,7 @@ class CASEDagGenSupervisor(BaseSupervisor):
         """
         intra_graph = graphs[:, :, -1, :, :]
 
-        acyclic = constraint2(intra_graph, max_loop).abs().mean()
+        acyclic = acyclic_loss(intra_graph, max_loop).abs().mean()
         sp_loss = graph_sparsity_loss(graphs)
         sg_loss = graph_segment_change_loss(graphs)
 
@@ -277,9 +277,9 @@ class CASEDagGenSupervisor(BaseSupervisor):
                 sp_loss = graph_sparsity_loss(graphs)
                 sg_loss = graph_segment_change_loss(graphs)
                 ac_loss = acyclic_loss(graphs[:, :, -1, :, :], approx=False)
-                ac_loss_2 = constraint2(graphs[:, :, -1, :, :], max_loop=self.num_nodes).mean()
+                #ac_loss_2 = constraint2(graphs[:, :, -1, :, :], max_loop=self.num_nodes).mean()
                 self.logger.info(f"Example_graphs: exact ac_loss {ac_loss: .4f}, "
-                                 f"approx ac_loss {ac_loss_2:.4f}, sp_loss {sp_loss: .4f}, sg_loss {sg_loss: .4f}")
+                                 f"approx ac_loss {ac_loss:.4f}, sp_loss {sp_loss: .4f}, sg_loss {sg_loss: .4f}")
                 if not os.path.exists(save_dir):
                     os.makedirs(save_dir)
                 plot_multi_slice_graphs(graphs[:, sample_id, ...], plot_dir=save_dir)
@@ -308,7 +308,7 @@ class CASEDagGenSupervisor(BaseSupervisor):
             for batch_idx, (data, target) in enumerate(self.train_loader):
                 data, _ = self.prepare_data(data, target, num_nodes=self.num_nodes, out_feats_dim=self.out_feats_dim)
                 graphs, _ = self.model(data)
-                ac_loss = constraint2(graphs[:, :, -1, :, :], max_loop=self.num_nodes).abs().mean()
+                ac_loss = acyclic_loss(graphs[:, :, -1, :, :]).abs().mean()
                 ac_total_loss += ac_loss.item()
         ac_avg_loss = ac_total_loss / self.train_per_epoch
         return ac_avg_loss
