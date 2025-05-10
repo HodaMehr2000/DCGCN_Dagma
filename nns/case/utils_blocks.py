@@ -50,7 +50,7 @@ class DyGCN(nn.Module):
         t3 = self.fc2(t2).permute(1, 2, 0, 3)  # (B, N, T, H)
         out = self.bn(t3).permute(2, 0, 1, 3)
         return out
-adj.reshape(T*B, N, N)
+#adj.reshape(T*B, N, N)
 
 class MultiHeadLinear(nn.Module):
     """
