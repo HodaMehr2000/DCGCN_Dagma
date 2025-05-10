@@ -32,11 +32,30 @@ class CASEDagGenSupervisor(BaseSupervisor):
         self.masked_mae_loss = masked_mae_loss(self.standard_scaler, 0.1)
         self.masked_mse_loss = masked_mse_loss(self.standard_scaler, 0.1)
 
+    # def load_adj_mx(self):
+    #     adj_mat = load_graph(os.path.join(base_dir, "data/sensor_graph/adj_mx.pkl"))
+    #     if adj_mat.shape[0] > self.num_nodes:
+    #         adj_mat = adj_mat[:self.num_nodes, :self.num_nodes]
+    #     return adj_mat
+    
     def load_adj_mx(self):
-        adj_mat = load_graph(os.path.join(base_dir, "data/sensor_graph/adj_mx.pkl"))
+        # اول مسیر دیتاست را امتحان کن (مثلاً data/METR-LA/N20/sensor_graph/adj_mx.pkl)
+        ds = self._data_kwargs.get('dataset_dir', '')
+        p1 = os.path.join(self.base_dir, ds, 'sensor_graph', 'adj_mx.pkl')
+        if os.path.exists(p1):
+            adj_mat = load_graph(p1)
+        else:
+            # بعد مسیر قدیمی را امتحان کن
+            p2 = os.path.join(self.base_dir, 'data', 'sensor_graph', 'adj_mx.pkl')
+            if os.path.exists(p2):
+                adj_mat = load_graph(p2)
+            else:
+                raise FileNotFoundError(f"Cannot find adj_mx.pkl in either {p1} or {p2}")
+        # اگر تعداد نودها بیشتر بود، برش بزن
         if adj_mat.shape[0] > self.num_nodes:
             adj_mat = adj_mat[:self.num_nodes, :self.num_nodes]
         return adj_mat
+
 
     def _get_model(self):
         self.model_version = 'g4s2v1'
