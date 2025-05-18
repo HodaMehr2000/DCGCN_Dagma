@@ -1,19 +1,19 @@
 {
   "pre_trained": false,
-  "log_dir": "data/model_logs_large/case_dag_gen/N20",
+  "log_dir": "data/model_logs_large/case_dag_gen/full",
   "log_level": "INFO",
   "save_and_log": true,
   "save_tb": false,
   "data": {
     "batch_size": 64,
     "sample_ratio": 0.3,
-    "dataset_dir": "data/METR-LA-DCRNN/N20"
+    "dataset_dir": "data/METR-LA-DCRNN"
   },
   "model": {
     "description": "CASE_DAG_GEN",
     "special_id": null,
     "seq_len": 11,
-    "num_nodes": 20,
+    "num_nodes": 207,
     "in_feats_dim": 2,
     "out_feats_dim": 1,
     "hidden_dim": 64,
@@ -41,7 +41,7 @@
     "epoch": 0,
     "epochs": 100,
     "log_step": 100,
-    "tensorboard_dir": "data/runs/case_dag_gen/N20",
+    "tensorboard_dir": "data/runs/case_dag_gen/full",
     "plot": true,
     "plot_warmup": 5,
     "optimizer": "adam",
